@@ -3,19 +3,19 @@ pipeline {
 
   stages {
     stage("Construindo imagem Docker") {
-      step {
+      steps {
         sh 'echo "Executando o comando docker build..."'
       }
     }
 
     stage("Empurrando imagem Docker") {
-      step {
+      steps {
         sh 'echo "ExecEmpurrando a imagem Docker para o Registry..."'
       }
     }
 
     stage("Executando Deploy") {
-      step {
+      steps {
         sh 'echo "Executando o deployment da imagem..."'
       }
     }
