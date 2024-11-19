@@ -1,17 +1,27 @@
-pipeline{
-  agent any
+pipeline {
+    agent any
 
-  stages {
-    stage('Verificar Repositório Git') {
-        steps {
-            script {
-                sh 'pwd'  // Exibe o diretório atual
-                sh 'ls -l'  // Lista os arquivos do diretório atual
-                sh 'git status'  // Verifica o status do repositório Git
+    stages {
+        stage("Build Image") {
+            steps {
+                sshagent(['jenkins-docker']) { // ID da credencial SSH configurada no Jenkins
+                    sh """
+                    ssh jenkins@10.108.0.2 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ./Dockerfile ./src'
+                    """
+                }
+            }
+        }
+
+        stage("Push Docker Image") {
+            steps {
+                sshagent(['jenkins-docker']) { // ID da credencial SSH configurada no Jenkins
+                    sh """
+                    ssh jenkins@10.108.0.2 'docker login harbor.dcwork.com.br --username username --password password && docker push harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID}'
+                    """
+                }
             }
         }
     }
-  }
 }
 
 
