@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-docker']) {
                     sh """
-                    ssh jenkins@10.108.0.2 'git clone https://github.com/seu-usuario/seu-repo.git /tmp/build'
+                    ssh jenkins@10.108.0.2 'git clone https://github.com/daniel-camilo/appweb-dcs.git /tmp/build'
                     """
                 }
             }
