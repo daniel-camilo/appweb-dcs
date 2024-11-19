@@ -1,4 +1,15 @@
-pipeline {
+stage('Verificar Repositório Git') {
+    steps {
+        script {
+            sh 'pwd'  // Exibe o diretório atual
+            sh 'ls -l'  // Lista os arquivos do diretório atual
+            sh 'git status'  // Verifica o status do repositório Git
+        }
+    }
+}
+
+
+/* pipeline {
   agent any
 
   stages {
@@ -20,6 +31,6 @@ pipeline {
       }
     }
   }
-}
+} */
 
 // harbor_credential
