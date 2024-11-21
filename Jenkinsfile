@@ -3,21 +3,11 @@ pipeline {
     agent any
 
     stages {
-        stage("Clone Repository") {
-            steps {
-                sshagent(['jenkins-ssh-docker']) {
-                    sh """
-                    ssh jenkins@192.168.150.52 'git clone https://github.com/daniel-camilo/appweb-dcs.git /tmp/build'
-                    """
-                }
-            }
-        }
-
         stage("Build Image") {
             steps {
                 sshagent(['jenkins-ssh-docker']) {
                     sh """
-                    ssh jenkins@192.168.150.52 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f /tmp/build/Dockerfile /tmp/build/src'
+                    ssh jenkins@192.168.150.52 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src'
                     """
                 }
             }

@@ -14,7 +14,11 @@
         <link rel="icon" href="icones/login.png">
         <style>
                 body {
-                        background-color: #F5F5DC; /* Bege */
+                        /* ALTERAR CORES AQUI PARA SIMULAR TESTES NO FORMULÁRIO.
+                        Link com paleta de cores para usar no CSS:
+                        https://www.ranoya.com/books/public/css/corescss.php
+                        */
+                        background-color: #FFB6C1;
                 }
                 .container {
             padding-top: 50px; /* Adiciona espaço no topo */
@@ -39,8 +43,4 @@
                         Developed By Daniel C-S.
                 </p>
         </div>
-        <!--
-                # Link com paleta de cores para usar no CSS:
-                https://www.ranoya.com/books/public/css/corescss.php
-        -->
 </html>
