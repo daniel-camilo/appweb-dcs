@@ -19,5 +19,16 @@ pipeline {
                 }
             }
         }
+
+        stage("Deploy Application") {
+            steps {
+                script {
+                    docker.withRegistry("https://harbor.dcwork.com.br", "harbor_credential") {
+                        def appContainer = docker.image("harbor.dcwork.com.br/appweb-vbox/appweb-jks:${env.BUILD_ID}")
+                        appContainer.run("-d -p 9092:80 --name appweb-${env.BUILD_ID}")
+                    }
+                }
+            }
+        }       
     }
 }
