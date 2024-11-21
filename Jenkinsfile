@@ -1,3 +1,4 @@
+// Pipeline usando SSH Agent Plugin.
 pipeline {
     agent any
 
