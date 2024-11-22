@@ -8,7 +8,7 @@ pipeline {
                 sshagent(['jenkins-docker']) {
                     sh """
                     VAR_PATH=/tmp/build-${env.BUILD_ID}
-                    ssh jenkins@10.108.0.2 'git clone https://github.com/seu-usuario/seu-repo.git ${VAR_PATH}'
+                    ssh jenkins@192.168.150.52 'git clone https://github.com/daniel-camilo/appweb-dcs.git ${VAR_PATH}'
                     """
                 }
             }
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-docker']) {
                     sh """
-                    ssh jenkins@10.108.0.2 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${VAR_PATH}/Dockerfile ${VAR_PATH}/src'
+                    ssh jenkins@192.168.150.52 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${VAR_PATH}/Dockerfile ${VAR_PATH}/src'
                     """
                 }
             }
