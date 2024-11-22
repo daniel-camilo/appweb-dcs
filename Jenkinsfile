@@ -2,12 +2,15 @@
 pipeline {
     agent any
 
+    environment {
+        VAR_PATH = "/tmp/build-${env.BUILD_ID}"
+    }
+
     stages {
         stage("Clone Repository") {
             steps {
                 sshagent(['jenkins-docker']) {
                     sh """
-                    VAR_PATH=/tmp/build-${env.BUILD_ID}
                     ssh jenkins@192.168.150.52 'git clone https://github.com/daniel-camilo/appweb-dcs.git ${VAR_PATH}'
                     """
                 }
