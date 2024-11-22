@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         VAR_PATH = "/tmp/build-${env.BUILD_ID}"
+        APP_NAME = "appweb-ssh-agent"
     }
 
     stages {
@@ -38,6 +39,21 @@ pipeline {
                         "
                         """
                     }
+                }
+            }
+        }
+
+        stage("Deploy Application") {
+            steps {
+                sshagent(['jenkins-ssh-docker']) {
+                    sh """
+                    ssh jenkins@192.168.150.52 "
+                        docker pull harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} &&
+                        docker stop ${APP_NAME} || true &&
+                        docker rm ${APP_NAME} || true &&
+                        docker run -d --name ${APP_NAME} -p 9094:80 harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID}
+                    "
+                    """
                 }
             }
         }
