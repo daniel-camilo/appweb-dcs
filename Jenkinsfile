@@ -2,16 +2,12 @@
 pipeline {
     agent any
 
-    environment {
-        VAR_PATH = "/tmp/build-${env.BUILD_ID}"
-    }
-
     stages {
         stage("Clone Repository") {
             steps {
                 sshagent(['jenkins-docker']) {
                     sh """
-                    ssh jenkins@192.168.150.52 'git clone https://github.com/daniel-camilo/appweb-dcs.git ${VAR_PATH}'
+                    ssh jenkins@192.168.150.52 'git clone https://github.com/daniel-camilo/appweb-dcs.git /tmp/build-${env.BUILD_ID}'
                     """
                 }
             }
@@ -21,7 +17,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-docker']) {
                     sh """
-                    ssh jenkins@192.168.150.52 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${VAR_PATH}/Dockerfile ${VAR_PATH}/src'
+                    ssh jenkins@192.168.150.52 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f /tmp/build-${env.BUILD_ID}/Dockerfile /tmp/build-${env.BUILD_ID}/src'
                     """
                 }
             }
