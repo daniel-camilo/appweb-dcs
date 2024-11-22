@@ -2,6 +2,10 @@
 pipeline {
     agent any
 
+    environment {
+        CONTAINER_NAME = "appweb-docpipe"
+    }
+
     stages {
         stage("Build Image") {
             steps {
@@ -25,11 +29,22 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("https://harbor.dcwork.com.br", "harbor_credential") {
+
+                        // Parar e remover o container, se já existir
+                        try {
+                            def oldContainer = docker.container(${CONTAINER_NAME})
+                            oldContainer.stop()
+                            oldContainer.remove()
+                        } catch (Exception e) {
+                            echo "Nenhum container antigo encontrado com o nome ${CONTAINER_NAME}."
+                        }
+
+                        // Executar o novo container
                         def appContainer = docker.image("harbor.dcwork.com.br/appweb-vbox/appweb-jks:${env.BUILD_ID}")
-                        appContainer.run("-d -p 9092:80 --name appweb-${env.BUILD_ID}")
+                        appContainer.run("-d -p 9092:80 --name ${CONTAINER_NAME}")
                     }
                 }
             }
-        }       
+        }
     }
 }
