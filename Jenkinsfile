@@ -4,7 +4,6 @@ pipeline {
 
     environment {
         APP_NAME = "appweb-ssh-cloud"
-        REMOTE_WSPACE = "/root/docker-projects/jenkins/jenkins_data/workspace/${env.JOB_NAME}"
         HOSTSERVER = "jenkins@10.118.0.2"
     }
 
@@ -14,7 +13,7 @@ pipeline {
             steps {
                 sshagent(['ssh-docker']) {
                     sh """
-                    ssh ${env.HOSTSERVER} 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${env.REMOTE_WSPACE}/Dockerfile ${env.REMOTE_WSPACE}/src'
+                    ssh ${env.HOSTSERVER} 'docker build -t harbor.dcwork.com.br/appweb-pipeline/appweb-jks:${env.BUILD_ID} -f ${env.WORKSPACE}/Dockerfile ${env.WORKSPACE}/src'
                     """
                 }
             }
