@@ -1,12 +1,15 @@
 pipeline {
     agent any
+    
+    environment {
+        REMOTE_WSPACE = "~/docker-projects/jenkins/jenkins_data/workspace/${env.JOB_NAME}"
+    }
 
     stages {
         stage('Exibir Informações do Pipeline') {
             steps {
                 script {
-                    echo "Nome do Pipeline: ${env.JOB_NAME}"
-                    echo "Workspace do Pipeline: ${env.WORKSPACE}"
+                    echo "Workspace remoto do Pipeline: ${env.WORKSPACE}"
                 }
             }
         }
