@@ -2,9 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Exibir Nome do Pipeline') {
+        stage('Exibir Informações do Pipeline') {
             steps {
-                echo "O nome do pipeline é: ${env.JOB_NAME}"
+                script {
+                    echo "Nome do Pipeline: ${env.JOB_NAME}"
+                    echo "Workspace do Pipeline: ${env.WORKSPACE}"
+                }
             }
         }
     }
