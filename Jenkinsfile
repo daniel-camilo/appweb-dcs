@@ -9,7 +9,7 @@ pipeline {
         stage('Exibir Informações do Pipeline') {
             steps {
                 script {
-                    echo "Workspace remoto do Pipeline: ${env.WORKSPACE}"
+                    echo "Workspace remoto do Pipeline: ${env.REMOTE_WSPACE}"
                 }
             }
         }
