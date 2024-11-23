@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        REMOTE_WSPACE = "~/docker-projects/jenkins/jenkins_data/workspace/${env.JOB_NAME}"
+        REMOTE_WSPACE = "/root/docker-projects/jenkins/jenkins_data/workspace/${env.JOB_NAME}"
     }
 
     stages {
