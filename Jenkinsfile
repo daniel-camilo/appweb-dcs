@@ -9,11 +9,11 @@ pipeline {
         stage("Build Image") {
             steps {
                 script {
-                    sh '''
+                    sh """
                     echo "O nome da aplicação é: ${env.CONTAINER_NAME}"
                     pwd
                     ls -lha
-                    '''
+                    """
                     // dockerImage = docker.build("harbor.dcwork.com.br/appweb-vbox/appweb-jks:${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
                 }
             }
