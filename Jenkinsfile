@@ -1,20 +1,25 @@
-// Pipeline usando Docker Pipeline Plugin:
 pipeline {
     agent any
 
     environment {
-        CONTAINER_NAME = "appweb-docpipe"
+        CONTAINER_NAME = "appweb"
     }
 
     stages {
         stage("Build Image") {
             steps {
                 script {
-                    dockerImage = docker.build("harbor.dcwork.com.br/appweb-vbox/appweb-jks:${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
+                    sh '''
+                    echo "O nome da aplicação é: ${env.CONTAINER_NAME}"
+                    pwd
+                    ls -lha
+                    '''
+                    // dockerImage = docker.build("harbor.dcwork.com.br/appweb-vbox/appweb-jks:${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
                 }
             }
         }
 
+        /*
         stage("Push Docker Image") {
             steps {
                 script {
@@ -49,5 +54,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
