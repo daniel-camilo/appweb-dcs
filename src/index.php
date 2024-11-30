@@ -31,7 +31,7 @@
                                 <div class="col-sm-12">
                                         <h1 class="badge" style="background-color: #006400; color: #F0E68C; font-size: 36px;padding: 20px; max-width: 100%; white-space: normal;">
                                                 <?php
-                                                        echo 'VM: ' . getenv('HOSTNAME');
+                                                        echo 'Hostname: ' . getenv('HOSTNAME');
                                                 ?>
                                         </h1>
                                 </div>
