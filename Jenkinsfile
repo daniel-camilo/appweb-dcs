@@ -41,8 +41,8 @@ pipeline {
                         }
 
                         // Executar o novo container
-                        def appContainer = docker.image("harbor.dcwork.com.br/appweb-pipeline/appweb-jks:v${env.BUILD_ID}")
-                        appContainer.run("-d -p 9092:80 --name ${CONTAINER_NAME}")
+                        def appContainer = docker.image("harbor.dcwork.com.br/appweb-pipeline/${env.CONTAINER_NAME}:v${env.BUILD_ID}")
+                        appContainer.run("-d -p 8081:80 --name ${CONTAINER_NAME}")
                     }
                 }
             }
