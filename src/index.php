@@ -18,7 +18,7 @@
                         Link com paleta de cores para usar no CSS:
                         https://www.ranoya.com/books/public/css/corescss.php
                         */
-                        background-color: #B0E0E6;
+                        background-color: #696969;
                 }
                 .container {
             padding-top: 50px; /* Adiciona espaço no topo */
