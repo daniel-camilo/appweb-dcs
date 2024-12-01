@@ -1,39 +1,49 @@
+// Pipeline usando o plugin Docker Pipeline.
 pipeline {
     agent any
 
     environment {
-        CONTAINER_NAME = "appweb"
+        // dpp = Docker Pipeline Plugin
+        CONTAINER_NAME = "appweb-dpp"
     }
 
     stages {
-        stage("Construindo a imagem...") {
+        stage("Build Image") {
             steps {
                 script {
-                    sh "docker build -t ${env.CONTAINER_NAME}:${env.BUILD_ID} -f Dockerfile src"
+                    dockerImage = docker.build("harbor.dcwork.com.br/appweb-pipeline/appweb-jks:v${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
                 }
             }
         }
 
-        stage("Encerrando container pré existente...") {
+        stage("Push Docker Image") {
             steps {
                 script {
-                    // Verifica se o conatiner está em execução e o remove:
-                    sh """
-                    if [ \$(docker ps -aq -f name=${CONTAINER_NAME}) ]; then
-                        docker stop ${CONTAINER_NAME} || true
-                        docker rm ${CONTAINER_NAME} || true
-                    fi
-                    """
+                    docker.withRegistry("https://harbor.dcwork.com.br", "harbor_credential") {
+                        dockerImage.push()
+                    }
                 }
             }
         }
 
-        stage("Implantando o container...") {
+        stage("Deploy Application") {
             steps {
                 script {
-                    sh """
-                    docker run -d --name ${CONTAINER_NAME} -p 8081:80 ${env.CONTAINER_NAME}:${env.BUILD_ID}
-                    """
+                    docker.withRegistry("https://harbor.dcwork.com.br", "harbor_credential") {
+
+                        // Parar e remover o container, se já existir
+                        try {
+                            def oldContainer = docker.container(${CONTAINER_NAME})
+                            oldContainer.stop()
+                            oldContainer.remove()
+                        } catch (Exception e) {
+                            echo "Nenhum container antigo encontrado com o nome ${CONTAINER_NAME}."
+                        }
+
+                        // Executar o novo container
+                        def appContainer = docker.image("harbor.dcwork.com.br/appweb-pipeline/appweb-jks:v${env.BUILD_ID}")
+                        appContainer.run("-d -p 9092:80 --name ${CONTAINER_NAME}")
+                    }
                 }
             }
         }
