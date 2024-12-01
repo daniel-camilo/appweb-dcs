@@ -30,19 +30,18 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("https://harbor.dcwork.com.br", "harbor_credential") {
+                        def containerName = env.CONTAINER_NAME
+                        def imageName = "harbor.dcwork.com.br/appweb-pipeline/${env.CONTAINER_NAME}:v${env.BUILD_ID}"
 
-                        // Parar e remover o container, se já existir
+                        // Parar e remover o container existente (usando shell, porque o plugin não suporta isso diretamente)
                         try {
-                            def oldContainer = docker.container(${env.$CONTAINER_NAME})
-                            oldContainer.stop()
-                            oldContainer.remove()
+                            sh "docker rm -f ${containerName} || true"
+                            echo "Container antigo '${containerName}' foi removido com sucesso."
                         } catch (Exception e) {
-                            echo "Nenhum container antigo encontrado com o nome ${env.$CONTAINER_NAME}."
+                            echo "Nenhum container antigo encontrado com o nome '${containerName}'."
                         }
-
                         // Executar o novo container
-                        def appContainer = docker.image("harbor.dcwork.com.br/appweb-pipeline/${env.CONTAINER_NAME}:v${env.BUILD_ID}")
-                        appContainer.run("-d -p 8081:80 --name ${env.$CONTAINER_NAME}")
+                        docker.image(imageName).run("-d -p 8081:80 --name ${containerName}")
                     }
                 }
             }
