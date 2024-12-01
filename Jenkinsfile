@@ -11,7 +11,7 @@ pipeline {
         stage("Build Image") {
             steps {
                 script {
-                    dockerImage = docker.build("harbor.dcwork.com.br/appweb-pipeline/appweb-jks:v${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
+                    dockerImage = docker.build("harbor.dcwork.com.br/appweb-pipeline/${env.CONTAINER_NAME}:v${env.BUILD_ID}", "-f ${WORKSPACE}/Dockerfile ${WORKSPACE}/src")
                 }
             }
         }
