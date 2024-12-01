@@ -33,16 +33,16 @@ pipeline {
 
                         // Parar e remover o container, se já existir
                         try {
-                            def oldContainer = docker.container(${CONTAINER_NAME})
+                            def oldContainer = docker.container(${env.$CONTAINER_NAME})
                             oldContainer.stop()
                             oldContainer.remove()
                         } catch (Exception e) {
-                            echo "Nenhum container antigo encontrado com o nome ${CONTAINER_NAME}."
+                            echo "Nenhum container antigo encontrado com o nome ${env.$CONTAINER_NAME}."
                         }
 
                         // Executar o novo container
                         def appContainer = docker.image("harbor.dcwork.com.br/appweb-pipeline/${env.CONTAINER_NAME}:v${env.BUILD_ID}")
-                        appContainer.run("-d -p 8081:80 --name ${CONTAINER_NAME}")
+                        appContainer.run("-d -p 8081:80 --name ${env.$CONTAINER_NAME}")
                     }
                 }
             }
